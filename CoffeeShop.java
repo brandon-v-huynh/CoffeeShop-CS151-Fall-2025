@@ -46,4 +46,19 @@ public class CoffeeShop {
             menu.add("Croissant");
         }
     }
+
+    private static void viewMenu() {
+        System.out.println("\nMenu:");
+        for (int i = 0; i < menu.size(); i++) {
+            Object o = menu.get(i);
+            String name = o.toString();
+            double price = 0;
+            try {
+                Class<?> c = o.getClass();
+                Object p = c.getMethod("getPrice").invoke(o);
+                if (p instanceof Number) price = ((Number)p).doubleValue();
+            } catch (Exception ignored) { }
+            System.out.printf("%d. %s - $%.2f\n", i + 1, name, price);
+        }
+    }
 }
