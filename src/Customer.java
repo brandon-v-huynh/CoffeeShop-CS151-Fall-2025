@@ -41,4 +41,11 @@ public class Customer extends Person {
         int lp = getPoints();
         return lp >= t;
     }
+
+    public void mergeLoyalty(Customer other) {
+        if (other == null) return;
+        int add = other.getPoints();
+        if (add < 0) add = 0;
+        this.loyaltyPoints += add;
+    }
 }
