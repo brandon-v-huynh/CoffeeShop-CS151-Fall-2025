@@ -110,5 +110,11 @@ public class CoffeeShop {
         orders.add(order);
         System.out.println("Order placed successfully.");
     }
-
+    private static void viewOrders() {
+        if (orders.isEmpty()) {
+            System.out.println("No orders yet.");
+            return;
+        }
+        for (Order o : orders) System.out.println(o);
+    }
 }
