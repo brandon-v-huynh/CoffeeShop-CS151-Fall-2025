@@ -74,4 +74,41 @@ public class CoffeeShop {
         customer.greet();
         Order order = new Order(customer);
 
+        while (true) {
+            viewMenu();
+            System.out.print("Enter item number (0 to finish): ");
+            String in = sc.nextLine();
+            if (in.equals("0")) break;
+            int num;
+            try {
+                num = Integer.parseInt(in);
+            } catch (Exception e) {
+                System.out.println("Invalid input.");
+                continue;
+            }
+            if (num < 1 || num > menu.size()) {
+                System.out.println("Invalid choice.");
+                continue;
+            }
+            System.out.print("Quantity: ");
+            int qty;
+            try {
+                qty = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                System.out.println("Invalid input.");
+                continue;
+            }
+            if (!order.addItem(menu.get(num - 1), qty)) {
+                System.out.println("Failed to add item.");
+            } else {
+                System.out.println("Item added.");
+            }
+            if (order.getItemCount() >= Order.MAX_ITEMS_PER_ORDER) break;
+        }
+
+        System.out.printf("Total: $%.2f\n", order.getTotal());
+        orders.add(order);
+        System.out.println("Order placed successfully.");
+    }
+
 }
