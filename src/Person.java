@@ -86,5 +86,15 @@ public abstract class Person {
         b = b.trim();
         return a.equals(b);
     }
+    public String normalizedPhone() {
+        String p = this.phone;
+        if (p == null) return "";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < p.length(); i++) {
+            char c = p.charAt(i);
+            if (c >= '0' && c <= '9') sb.append(c);
+        }
+        return sb.toString();
+    }
 }
 
