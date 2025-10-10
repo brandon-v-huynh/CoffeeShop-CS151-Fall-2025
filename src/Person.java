@@ -64,4 +64,9 @@ public abstract class Person {
             this.phone = p;
         }
     }
+    @Override
+    public String toString() {
+        return "Name: " + getName() + ", Phone: " + getPhone();
+    }
 }
+
