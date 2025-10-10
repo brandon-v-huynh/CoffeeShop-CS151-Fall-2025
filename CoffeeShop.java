@@ -7,4 +7,9 @@ public class CoffeeShop {
     private static final List<Order> orders = new ArrayList<>();
     private static final Scanner sc = new Scanner(System.in);
     public static final int MAX_ORDERS = 100;
+
+    public static void main(String[] args) {
+        preloadMenu();
+        menuLoop();
+    }
 }
