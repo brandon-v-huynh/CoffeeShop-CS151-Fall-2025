@@ -68,5 +68,23 @@ public abstract class Person {
     public String toString() {
         return "Name: " + getName() + ", Phone: " + getPhone();
     }
+    public boolean equalsByName(Person other) {
+        if (other == null) return false;
+        String a = this.getName();
+        String b = other.getName();
+        if (a == null || b == null) return false;
+        a = a.trim().toLowerCase();
+        b = b.trim().toLowerCase();
+        return a.equals(b);
+    }
+    public boolean equalsByPhone(Person other) {
+        if (other == null) return false;
+        String a = this.getPhone();
+        String b = other.getPhone();
+        if (a == null || b == null) return false;
+        a = a.trim();
+        b = b.trim();
+        return a.equals(b);
+    }
 }
 
