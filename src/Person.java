@@ -30,7 +30,7 @@ public abstract class Person {
         if (s == null) return false;
         String t = s.trim();
         if (t.matches("\\d{10}")) return true;
-        if (t.matches("\\d{3}-\\d{3}-\\d{4}")) return true;
+        if (t.matches("\\d{3}-\\ad{3}-\\d{4}")) return true;
         return false;
     }
 
@@ -54,4 +54,14 @@ public abstract class Person {
         n = n.trim();
         if (n.length() == 0) n = "";
         this.name = n;
-    }}
+    }
+    public void setPhone(String phone) {
+        String p = phone;
+        if (p == null) p = "";
+        p = p.trim();
+        if (p.length() == 0) p = "";
+        if (isPhoneValid(p)) {
+            this.phone = p;
+        }
+    }
+}
