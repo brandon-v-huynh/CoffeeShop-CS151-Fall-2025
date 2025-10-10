@@ -3,7 +3,7 @@ package coffeeshop;
 public class Barista {
     private String name;
     private String phone;
-    private String employeeID;
+    private String employeeId;
     private String shift;
     private boolean isClockedIn;
     private int ordersCompleted;
@@ -14,7 +14,7 @@ public class Barista {
     public Barista(String name, String phone, String employeeID, String shift) {
         this.name = name;
         this.phone = phone;
-        this.employeeID = employeeID;
+        this.employeeId = employeeID;
         this.shift = shift.toUpperCase();
         this.isClockedIn = false;
         ordersCompleted = 0;
@@ -27,7 +27,7 @@ public class Barista {
 
     // PLEASE RESOLVE ORDER.JAVA
     // ALSO SETSTATUS() WITHIN ORDER.JAVA
-    public void completeOrder(Order order) {
+    public void makeOrder(Order order) {
         if (order == null) {
             throw new IllegalArgumentException("Order cannot be null");
         }
@@ -75,7 +75,7 @@ public class Barista {
 
     public void viewPerformance() {
         System.out.println(name + "'s performance");
-        System.out.println("Employee ID: " + employeeID);
+        System.out.println("Employee ID: " + employeeId);
         System.out.println("Shift: " + shift);
         System.out.println("Orders completed: " + ordersCompleted);
         System.out.println("Current status: " + (isClockedIn ? "Clocked IN" : "Clocked OUT"));
@@ -105,13 +105,13 @@ public class Barista {
         this.phone = phone;
     }
 
-    public String getEmployeeID() { return employeeID; }
+    public String getEmployeeId() { return employeeId; }
 
-    public void setEmployeeID(String employeeID) {
-        if (employeeID == null || employeeID.trim().isEmpty()) {
+    public void setEmployeeId(String employeeId) {
+        if (employeeId == null || employeeId.trim().isEmpty()) {
             throw new IllegalArgumentException("Employee ID cannot be null or empty!");
         }
-        this.employeeID = employeeID;
+        this.employeeId = employeeId;
     }
 
     public String getShift() { return shift; }
@@ -130,7 +130,7 @@ public class Barista {
 
     @Override
     public String toString() {
-        return "Barista[ID: " + employeeID + ", Name: " + name + ", Shift: " + shift +
+        return "Barista[ID: " + employeeId + ", Name: " + name + ", Shift: " + shift +
                 ", Clocked In: " + isClockedIn + ", Orders Completed: " + ordersCompleted;
     }
 
