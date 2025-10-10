@@ -66,7 +66,13 @@ public abstract class Person {
     }
     @Override
     public String toString() {
-        return "Name: " + getName() + ", Phone: " + getPhone();
+        StringBuilder sb = new StringBuilder();
+        String n = getName();
+        String p = getPhone();
+        for (int i = 0; i < n.length(); i++) sb.append(n.charAt(i));
+        sb.append(" | ");
+        for (int i = 0; i < p.length(); i++) sb.append(p.charAt(i));
+        return sb.toString();
     }
     public boolean equalsByName(Person other) {
         if (other == null) return false;
