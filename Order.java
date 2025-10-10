@@ -41,4 +41,12 @@ public class Order {
     public Customer getCustomer() {
         return customer;
     }
+    public boolean addItem(Object menuItem, int qty) {
+        if (menuItem == null) return false;
+        if (qty <= 0) return false;
+        if (this.items.size() >= MAX_ITEMS_PER_ORDER) return false;
+        this.items.add(menuItem);
+        this.quantities.add(qty);
+        return true;
+    }
 }
