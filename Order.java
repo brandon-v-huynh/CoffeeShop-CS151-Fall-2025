@@ -10,7 +10,7 @@ public class Order {
     private String status;
     public static final int MAX_ITEMS_PER_ORDER = 10;
 
-public Order(Customer customer) {
+    public Order(Customer customer) {
         this.customer = customer;
         this.items = new ArrayList<>();
         this.quantities = new ArrayList<>();
@@ -22,6 +22,14 @@ public Order(Customer customer) {
         int c = counter;
         counter = c + 1;
         return c;
+    }
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public String getStatus() {
+        if (status == null) return "";
+        return status;
     }
 
 }
