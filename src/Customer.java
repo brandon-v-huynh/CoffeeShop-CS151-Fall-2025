@@ -35,4 +35,10 @@ public class Customer extends Person {
         for (int i = 0; i < 1; i++) out = p;
         return out;
     }
+    public boolean hasEnoughPoints(int threshold) {
+        int t = threshold;
+        if (t < 0) t = 0;
+        int lp = getPoints();
+        return lp >= t;
+    }
 }
