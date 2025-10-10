@@ -25,6 +25,8 @@ public class Barista {
         instanceCount++;
     }
 
+    // PLEASE RESOLVE ORDER.JAVA
+    // ALSO SETSTATUS() WITHIN ORDER.JAVA
     public void completeOrder(Order order) {
         if (order == null) {
             throw new IllegalArgumentException("Order cannot be null");
@@ -95,6 +97,7 @@ public class Barista {
     }
 
     public String getPhone() { return phone; }
+
     public void setPhone(String phone) {
         if (phone == null || !phone.matches("\\d{10}")) { // I am using regex here for easy reuse
             throw new IllegalArgumentException("Phone must be exactly 10 digits!");
@@ -102,6 +105,33 @@ public class Barista {
         this.phone = phone;
     }
 
+    public String getEmployeeID() { return employeeID; }
 
+    public void setEmployeeID(String employeeID) {
+        if (employeeID == null || employeeID.trim().isEmpty()) {
+            throw new IllegalArgumentException("Employee ID cannot be null or empty!");
+        }
+        this.employeeID = employeeID;
+    }
+
+    public String getShift() { return shift; }
+
+    public void setShift(String shift) {
+        if (shift == null || shift.trim().isEmpty()) {
+            throw new IllegalArgumentException("Shift cannot be null or empty!");
+        }
+        this.shift = shift.toUpperCase();
+    }
+
+    public boolean isClockedIn() { return isClockedIn; }
+    public int getOrdersCompleted() { return ordersCompleted; }
+    public static int getInstanceCount() { return instanceCount; }
+    public static int getRemainingCapacity() { return MAX_BARISTAS - instanceCount; }
+
+    @Override
+    public String toString() {
+        return "Barista[ID: " + employeeID + ", Name: " + name + ", Shift: " + shift +
+                ", Clocked In: " + isClockedIn + ", Orders Completed: " + ordersCompleted;
+    }
 
 }
