@@ -78,4 +78,9 @@ public class Order {
         }
         return sum;
     }
+    public int getItemCount() {
+        int n = 0;
+        for (int i = 0; i < items.size(); i++) n++;
+        return n;
+    }
 }
