@@ -117,4 +117,9 @@ public class CoffeeShop {
         }
         for (Order o : orders) System.out.println(o);
     }
+    private static void exitApp() {
+        System.out.println("Goodbye.");
+        sc.close();
+        System.exit(0);
+    }
 }
