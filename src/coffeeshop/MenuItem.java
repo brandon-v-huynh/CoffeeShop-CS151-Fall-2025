@@ -12,7 +12,7 @@ public class MenuItem implements Billable {
         setPrice(price);
     }
 
-    // ----- setters with basic validation -----
+    // setters w/ basic validation
     public void setName(String name) {
         if (name == null || name.isBlank()) {
             throw new InvalidOrderException("name can’t be empty");
@@ -34,11 +34,20 @@ public class MenuItem implements Billable {
         this.price = Math.round(price * 100.0) / 100.0;
     }
 
-    // ----- simple getters + interface stubs -----
     @Override
     public double calculateTotal(int qty) {
-        return 0; // placeholder for now
+        if (qty <= 0) {
+            throw new InvalidOrderException("quantity must be positive");
+        }
+        if (!available) {
+            throw new InvalidOrderException("item '" + name + "' is unavailable");
+        }
+
+        double total = price * qty;
+        // round to two decimals
+        return Math.round(total * 100.0) / 100.0;
     }
+
 
     @Override
     public String getItemName() { return name; }
