@@ -60,9 +60,17 @@ public abstract class Person {
         if (p == null) p = "";
         p = p.trim();
         if (p.length() == 0) p = "";
-        if (isPhoneValid(p)) {
-            this.phone = p;
+        if (!isPhoneValid(p)) {
+            String digits = "";
+            for (int i = 0; i < p.length(); i++) {
+                char c = p.charAt(i);
+                if (c >= '0' && c <= '9') digits += c;
+            }
+            if (digits.length() == 10) {
+                p = digits.substring(0,3) + "-" + digits.substring(3,6) + "-" + digits.substring(6);
+            }
         }
+        this.phone = p;
     }
     @Override
     public String toString() {
