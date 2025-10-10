@@ -49,4 +49,33 @@ public class Order {
         this.quantities.add(qty);
         return true;
     }
+
+    public double getTotal() {
+        double sum = 0.0;
+        for (int i = 0; i < items.size(); i++) {
+            Object o = items.get(i);
+            int q = quantities.get(i);
+            double price = 0.0;
+            if (o != null) {
+                try {
+                    Class<?> c = o.getClass();
+                    try {
+                        java.lang.reflect.Method m = c.getMethod("calculateTotal", int.class);
+                        Object v = m.invoke(o, q);
+                        if (v instanceof Number) {
+                            sum += ((Number) v).doubleValue();
+                        }
+                    } catch (NoSuchMethodException e) {
+                        java.lang.reflect.Method gp = c.getMethod("getPrice");
+                        Object p = gp.invoke(o);
+                        if (p instanceof Number) {
+                            price = ((Number) p).doubleValue();
+                            sum += price * q;
+                        }
+                    }
+                } catch (Exception ignore) { }
+            }
+        }
+        return sum;
+    }
 }
