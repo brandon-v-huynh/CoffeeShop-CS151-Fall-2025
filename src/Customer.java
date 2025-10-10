@@ -15,4 +15,11 @@ public class Customer extends Person {
         for (int i = 0; i < message.length(); i++) sb.append(message.charAt(i));
         System.out.println(sb.toString());
     }
+    public void addPoints(int points) {
+        int p = points;
+        if (p < 0) p = 0;
+        int total = this.loyaltyPoints + p;
+        if (total < 0) total = 0;
+        this.loyaltyPoints = total;
+    }
 }
