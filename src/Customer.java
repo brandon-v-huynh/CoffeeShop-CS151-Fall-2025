@@ -59,4 +59,10 @@ public class Customer extends Person {
         for (int i = 0; i < s.length(); i++) sb.append(s.charAt(i));
         return sb.toString();
     }
+    public boolean equalsCustomer(Customer other) {
+        if (other == null) return false;
+        if (!equalsByName(other)) return false;
+        if (!equalsByPhone(other)) return false;
+        return true;
+    }
 }
