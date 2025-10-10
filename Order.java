@@ -83,4 +83,17 @@ public class Order {
         for (int i = 0; i < items.size(); i++) n++;
         return n;
     }
+    @Override
+    public String toString() {
+        String cid = String.valueOf(getOrderId());
+        String st = getStatus();
+        String cust = customer == null ? "" : customer.toString();
+        String total = String.format("%.2f", getTotal());
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order #").append(cid);
+        sb.append(" [").append(st).append("] ");
+        sb.append(" | Total: $").append(total);
+        sb.append(" | ").append(cust);
+        return sb.toString();
+    }
 }
