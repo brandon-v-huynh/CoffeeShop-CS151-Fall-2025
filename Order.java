@@ -32,4 +32,13 @@ public class Order {
         return status;
     }
 
+    public void setStatus(String s) {
+        String v = s == null ? "" : s.trim();
+        if (v.isEmpty()) v = "Pending";
+        this.status = v;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
 }
