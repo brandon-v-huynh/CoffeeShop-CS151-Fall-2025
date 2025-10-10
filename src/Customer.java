@@ -48,4 +48,15 @@ public class Customer extends Person {
         if (add < 0) add = 0;
         this.loyaltyPoints += add;
     }
+    @Override
+    public String toString() {
+        String base = super.toString();
+        int pts = getPoints();
+        String s = String.valueOf(pts);
+        StringBuilder sb = new StringBuilder();
+        sb.append(base);
+        sb.append(" | Loyalty Points: ");
+        for (int i = 0; i < s.length(); i++) sb.append(s.charAt(i));
+        return sb.toString();
+    }
 }
