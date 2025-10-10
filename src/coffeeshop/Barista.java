@@ -51,6 +51,57 @@ public class Barista {
         System.out.println(name + " clocked in for " + shift);
     }
 
+    public void clockOut() {
+        if (!isClockedIn) {
+            System.out.println(name + " is clocked out");
+            return;
+        }
+
+        isClockedIn = false;
+        System.out.println(name + " clocked out for today. Completed " + ordersCompleted + " orders");
+    }
+
+    public void changeShift(String newShift) {
+        if (newShift == null || newShift.trim().isEmpty()) {
+            throw new IllegalArgumentException("Shift cannot be null or empty");
+        }
+
+        String oldShift = this.shift;
+        this.shift = newShift.toUpperCase();
+        System.out.println(name + " shift changed from " + oldShift + " to " + this.shift);
+    }
+
+    public void viewPerformance() {
+        System.out.println(name + "'s performance");
+        System.out.println("Employee ID: " + employeeID);
+        System.out.println("Shift: " + shift);
+        System.out.println("Orders completed: " + ordersCompleted);
+        System.out.println("Current status: " + (isClockedIn ? "Clocked IN" : "Clocked OUT"));
+    }
+
+    // A few setters/getters here n' there!
+
+    public void greet() {
+        System.out.println("Hi! Welcome to the CS151 Coffeeshop! I'm " + name + ", and your barista for the shift: " + shift);
+    }
+
+    public String getName() { return name; }
+
+    public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty!");
+        }
+        this.name = name;
+    }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) {
+        if (phone == null || !phone.matches("\\d{10}")) { // I am using regex here for easy reuse
+            throw new IllegalArgumentException("Phone must be exactly 10 digits!");
+        }
+        this.phone = phone;
+    }
+
 
 
 }
