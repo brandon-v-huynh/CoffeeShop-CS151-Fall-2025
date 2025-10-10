@@ -12,4 +12,21 @@ public class CoffeeShop {
         preloadMenu();
         menuLoop();
     }
+
+    private static void menuLoop() {
+        while (true) {
+            System.out.println("\n=== JAVA BEANS CAFE ===");
+            System.out.println("1. View Menu");
+            System.out.println("2. Place Order");
+            System.out.println("3. View Orders");
+            System.out.println("4. Exit");
+            System.out.print("Choice: ");
+            String input = sc.nextLine();
+            if (input.equals("1")) viewMenu();
+            else if (input.equals("2")) placeOrder();
+            else if (input.equals("3")) viewOrders();
+            else if (input.equals("4")) exitApp();
+            else System.out.println("Invalid choice.");
+        }
+    }
 }
