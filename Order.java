@@ -18,6 +18,10 @@ public Order(Customer customer) {
         this.orderId = nextId();
     }
 
-
+    private static synchronized int nextId() {
+        int c = counter;
+        counter = c + 1;
+        return c;
+    }
 
 }
