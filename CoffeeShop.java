@@ -61,4 +61,17 @@ public class CoffeeShop {
             System.out.printf("%d. %s - $%.2f\n", i + 1, name, price);
         }
     }
+    private static void placeOrder() {
+        if (orders.size() >= MAX_ORDERS) {
+            System.out.println("Order capacity reached.");
+            return;
+        }
+        System.out.print("Customer Name: ");
+        String name = sc.nextLine();
+        System.out.print("Phone: ");
+        String phone = sc.nextLine();
+        Customer customer = new Customer(name, phone);
+        customer.greet();
+        Order order = new Order(customer);
+
 }
