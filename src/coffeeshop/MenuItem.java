@@ -1,5 +1,6 @@
 package coffeeshop;
 
+// menu item for the coffee shop to hold info, prices, etc
 public class MenuItem implements Billable {
     private static int instanceCount = 0;
     public static final int MAX_MENU_ITEMS = 100;
@@ -9,19 +10,20 @@ public class MenuItem implements Billable {
     private double price;
     private boolean available = true;
 
-    // make item with name, description, and price
+    // makes sure price/name/desc are valid before saving
     public MenuItem(String name, String description, double price) {
-        // stop here if hit the cap
+        // stop here if cap hit
         if (instanceCount >= MAX_MENU_ITEMS) {
             throw new InvalidOrderException("menu capacity reached (max " + MAX_MENU_ITEMS + ")");
         }
         setName(name);
         setDescription(description);
         setPrice(price);
-        instanceCount++; // track the instances
+        instanceCount++; // track how many we made
     }
 
-    // name check
+    //setters with quick checks
+
     public void setName(String name) {
         if (name == null || name.isBlank()) {
             throw new InvalidOrderException("name can’t be empty");
@@ -29,7 +31,6 @@ public class MenuItem implements Billable {
         this.name = name.trim();
     }
 
-    // description check
     public void setDescription(String description) {
         if (description == null || description.isBlank()) {
             throw new InvalidOrderException("description can’t be empty");
@@ -37,7 +38,6 @@ public class MenuItem implements Billable {
         this.description = description.trim();
     }
 
-    // price check + round
     public void setPrice(double price) {
         if (price < 0) {
             throw new InvalidOrderException("price can’t be negative");
@@ -45,17 +45,17 @@ public class MenuItem implements Billable {
         this.price = Math.round(price * 100.0) / 100.0; // round to cents
     }
 
-    // change price (reuses validation)
+    //helper methods
     public void updatePrice(double newPrice) {
         setPrice(newPrice);
     }
 
-    // mark sold out / back in stock
+    // toggle sold out flag
     public void setAvailability(boolean flag) {
         this.available = flag;
     }
 
-    // quick % off helper
+    // apply percent off discount, and throws if bad value
     public double applyDiscount(double percent) {
         if (percent < 0 || percent > 100) {
             throw new InvalidOrderException("discount must be 0..100");
@@ -64,7 +64,7 @@ public class MenuItem implements Billable {
         return Math.round(discounted * 100.0) / 100.0; // round to cents
     }
 
-    // basic math for total
+    // price math with quantity + availability check
     @Override
     public double calculateTotal(int qty) {
         if (qty <= 0) {
@@ -77,7 +77,8 @@ public class MenuItem implements Billable {
         return Math.round(total * 100.0) / 100.0; // round to cents
     }
 
-    // billable interface stuff
+    // billable interface
+
     @Override
     public String getItemName() { return name; }
 
@@ -90,14 +91,16 @@ public class MenuItem implements Billable {
     @Override
     public boolean isAvailable() { return available; }
 
-    // look up an item by key and throw an exception if its not there
+    // static helpers
+
+    // static helper that throws if item key not found
     public static MenuItem requireFound(java.util.Map<String, MenuItem> menuByKey, String key) {
         MenuItem item = (menuByKey == null) ? null : menuByKey.get(key);
         if (item == null) throw new MenuItemNotFoundException(key);
         return item;
     }
 
-    // guard against adding too many items to an order
+    // static helper that stops orders over the limit
     public static void enforceOrderLimit(int currentCount, int addQty, int maxItemsPerOrder) {
         if (addQty <= 0) {
             throw new InvalidOrderException("quantity must be positive");
@@ -107,15 +110,17 @@ public class MenuItem implements Billable {
         }
     }
 
-    // print info clean
+    // overrides
+
     @Override
     public String toString() {
+        // shows name, price, and sold-out tag if needed
         return String.format("%s - $%.2f%s", name, price, available ? "" : " (UNAVAILABLE)");
     }
 
-    // compare two items
     @Override
     public boolean equals(Object o) {
+        // equality check for comparing items
         if (this == o) return true;
         if (!(o instanceof MenuItem)) return false;
         MenuItem that = (MenuItem) o;
@@ -125,9 +130,9 @@ public class MenuItem implements Billable {
                 description.equals(that.description);
     }
 
-    // so hashmaps/sets work right
     @Override
     public int hashCode() {
+        // so hashmaps and sets work right
         return java.util.Objects.hash(name, description, price, available);
     }
 }
