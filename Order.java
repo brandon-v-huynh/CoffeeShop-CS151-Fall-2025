@@ -9,4 +9,15 @@ public class Order {
     private List<Integer> quantities;
     private String status;
     public static final int MAX_ITEMS_PER_ORDER = 10;
+
+public Order(Customer customer) {
+        this.customer = customer;
+        this.items = new ArrayList<>();
+        this.quantities = new ArrayList<>();
+        this.status = "Pending";
+        this.orderId = nextId();
+    }
+
+
+
 }
