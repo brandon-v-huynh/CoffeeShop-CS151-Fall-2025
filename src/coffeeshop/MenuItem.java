@@ -1,6 +1,9 @@
 package coffeeshop;
 
 public class MenuItem implements Billable {
+    private static int instanceCount = 0;
+    public static final int MAX_MENU_ITEMS = 100;
+
     private String name;
     private String description;
     private double price;
@@ -8,9 +11,14 @@ public class MenuItem implements Billable {
 
     // make item with name, description, and price
     public MenuItem(String name, String description, double price) {
+        // stop here if hit the cap
+        if (instanceCount >= MAX_MENU_ITEMS) {
+            throw new InvalidOrderException("menu capacity reached (max " + MAX_MENU_ITEMS + ")");
+        }
         setName(name);
         setDescription(description);
         setPrice(price);
+        instanceCount++; // track the instances
     }
 
     // name check
@@ -34,7 +42,7 @@ public class MenuItem implements Billable {
         if (price < 0) {
             throw new InvalidOrderException("price can’t be negative");
         }
-        this.price = Math.round(price * 100.0) / 100.0;
+        this.price = Math.round(price * 100.0) / 100.0; // round to cents
     }
 
     // change price (reuses validation)
@@ -66,7 +74,7 @@ public class MenuItem implements Billable {
             throw new InvalidOrderException("item '" + name + "' is unavailable");
         }
         double total = price * qty;
-        return Math.round(total * 100.0) / 100.0;
+        return Math.round(total * 100.0) / 100.0; // round to cents
     }
 
     // billable interface stuff
@@ -81,6 +89,23 @@ public class MenuItem implements Billable {
 
     @Override
     public boolean isAvailable() { return available; }
+
+    // look up an item by key and throw an exception if its not there
+    public static MenuItem requireFound(java.util.Map<String, MenuItem> menuByKey, String key) {
+        MenuItem item = (menuByKey == null) ? null : menuByKey.get(key);
+        if (item == null) throw new MenuItemNotFoundException(key);
+        return item;
+    }
+
+    // guard against adding too many items to an order
+    public static void enforceOrderLimit(int currentCount, int addQty, int maxItemsPerOrder) {
+        if (addQty <= 0) {
+            throw new InvalidOrderException("quantity must be positive");
+        }
+        if (currentCount + addQty > maxItemsPerOrder) {
+            throw new OrderLimitExceededException(maxItemsPerOrder);
+        }
+    }
 
     // print info clean
     @Override
