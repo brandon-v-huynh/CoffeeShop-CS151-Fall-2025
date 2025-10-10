@@ -22,4 +22,11 @@ public class Customer extends Person {
         if (total < 0) total = 0;
         this.loyaltyPoints = total;
     }
+    public void redeemPoints(int used) {
+        int u = used;
+        if (u < 0) u = 0;
+        int current = this.loyaltyPoints;
+        if (u > current) u = current;
+        this.loyaltyPoints = current - u;
+    }
 }
