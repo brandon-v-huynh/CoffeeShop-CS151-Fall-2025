@@ -29,4 +29,21 @@ public class CoffeeShop {
             else System.out.println("Invalid choice.");
         }
     }
+
+    private static void preloadMenu() {
+        try {
+            Class<?> cls = Class.forName("MenuItem");
+            menu.add(cls.getConstructor(String.class, double.class).newInstance("Latte", 4.50));
+            menu.add(cls.getConstructor(String.class, double.class).newInstance("Espresso", 3.00));
+            menu.add(cls.getConstructor(String.class, double.class).newInstance("Americano", 3.75));
+            menu.add(cls.getConstructor(String.class, double.class).newInstance("Cappuccino", 4.25));
+            menu.add(cls.getConstructor(String.class, double.class).newInstance("Croissant", 2.50));
+        } catch (Exception e) {
+            menu.add("Latte");
+            menu.add("Espresso");
+            menu.add("Americano");
+            menu.add("Cappuccino");
+            menu.add("Croissant");
+        }
+    }
 }
