@@ -33,6 +33,23 @@ public class MenuItem implements Billable {
         }
         this.price = Math.round(price * 100.0) / 100.0;
     }
+    // change price
+    public void updatePrice(double newPrice) {
+        setPrice(newPrice);
+    }
+
+    // mark sold out / back in stock
+    public void setAvailability(boolean flag) {
+        this.available = flag;
+    }
+
+    public double applyDiscount(double percent) {
+        if (percent < 0 || percent > 100) {
+            throw new InvalidOrderException("discount must be 0..100");
+        }
+        double discounted = price * (1 - percent / 100.0);
+        return Math.round(discounted * 100.0) / 100.0; // round to cents
+    }
 
     @Override
     public double calculateTotal(int qty) {
