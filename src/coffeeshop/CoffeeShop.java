@@ -141,9 +141,28 @@ public class CoffeeShop {
 
     private static String getValidatedName() {
         while (true) {
+            System.out.print("Name: ");
+            String name = sc.nextLine().trim();
 
+            if (name.isEmpty()) {
+                System.out.println("Name cannot be empty! Please enter a name!");
+                continue;
+            }
+
+            if (!Customer.isValidName(name)) {
+                System.out.println("Invalid name. Name must be more than 2 characters!");
+                System.out.println("Try again? Input (y/n)");
+                String response = sc.nextLine().trim().toLowerCase();
+                if (!response.equals("y")) {
+                    return null;
+                }
+            } else {
+                return name;
+            }
         }
     }
+
+
 
     private static void viewOrders() {
         if (orders.isEmpty()) {
