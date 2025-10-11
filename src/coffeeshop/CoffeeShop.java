@@ -162,6 +162,31 @@ public class CoffeeShop {
         }
     }
 
+    private static String getValidatedPhone() {
+        while (true) {
+            System.out.print("Phone Number: ");
+            String phone = sc.nextLine().trim();
+
+            if (phone.isEmpty()) {
+                System.out.println("Phone number cannot be empty! Please enter a valid phone number!");
+                continue;
+            }
+
+            if (!Customer.isValidPhone(phone)) {
+                System.out.println("Invalid phone number. Please enter a valid 10-digit phone number!");
+                System.out.println("Try again? Input (y/n)");
+                String response = sc.nextLine().trim().toLowerCase();
+                if (!response.equals("y")) {
+                    return null;
+                }
+            } else {
+                return phone;
+            }
+        }
+    }
+
+
+
 
 
     private static void viewOrders() {
