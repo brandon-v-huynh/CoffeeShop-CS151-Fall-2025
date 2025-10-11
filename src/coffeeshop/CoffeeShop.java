@@ -17,7 +17,7 @@ public class CoffeeShop {
 
     private static void menuLoop() {
         while (true) {
-            System.out.println("\n=== JAVA BEANS CAFE ===");
+            System.out.println("\n=== CS 151 JAVA BEANS CAFE ==="); //added cs151 for fun!
             System.out.println("1. View Menu");
             System.out.println("2. Place Order");
             System.out.println("3. View Orders");
@@ -68,6 +68,22 @@ public class CoffeeShop {
             System.out.println("Order capacity reached.");
             return;
         }
+
+        // FIX: validate customer name
+        String name = getValidatedName();
+        if (name == null) {
+            System.out.println("Order cancelled");
+            return;
+        }
+
+        // FIX: validate phone number
+        String phone = getValidatedPhone();
+        if (phone == null) {
+            System.out.println("Order cancelled");
+            return;
+        }
+
+
         System.out.print("Customer Name: ");
         String name = sc.nextLine();
         System.out.print("Phone: ");
