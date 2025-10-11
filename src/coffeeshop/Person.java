@@ -1,10 +1,17 @@
 package coffeeshop;
 
 public abstract class Person {
+    private static int instanceCount = 0;
+    public static final int MAX_PERSONS = 100;
+    
     protected String name;
     protected String phone;
 
     public Person(String name, String phone) {
+        if (instanceCount >= MAX_PERSONS) {
+            throw new IllegalStateException("Cannot create more than " + MAX_PERSONS + " persons");
+        }
+        
         String n = name;
         if (n == null) n = "";
         n = n.trim();
@@ -15,6 +22,7 @@ public abstract class Person {
         if (p.length() == 0) p = "";
         this.name = n;
         this.phone = p;
+        instanceCount++;
         if (!isPhoneValid(p)) {
             String digits = "";
             for (int i = 0; i < p.length(); i++) {
@@ -111,6 +119,14 @@ public abstract class Person {
             if (c >= '0' && c <= '9') sb.append(c);
         }
         return sb.toString();
+    }
+    
+    public static int getInstanceCount() { 
+        return instanceCount; 
+    }
+    
+    public static int getRemainingCapacity() { 
+        return MAX_PERSONS - instanceCount; 
     }
 }
 

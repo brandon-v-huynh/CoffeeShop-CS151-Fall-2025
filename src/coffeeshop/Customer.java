@@ -1,11 +1,18 @@
 package coffeeshop;
 
 public class Customer extends Person {
+    private static int instanceCount = 0;
+    public static final int MAX_CUSTOMERS = 100;
+    
     private int loyaltyPoints;
 
     public Customer(String name, String phone) {
         super(name, phone);
+        if (instanceCount >= MAX_CUSTOMERS) {
+            throw new IllegalStateException("Cannot create more than " + MAX_CUSTOMERS + " customers");
+        }
         this.loyaltyPoints = 0;
+        instanceCount++;
     }
 
     @Override
@@ -81,16 +88,11 @@ public class Customer extends Person {
         String cleanedPhone = phone.replaceAll("[\\s\\-\\(\\)\\.]", "");
         return cleanedPhone.matches("\\d{10,}");
     }
-
-
-
-
-
-
-
-
-
-
-
+    public static int getInstanceCount() { 
+        return instanceCount; 
+    }
+    
+    public static int getRemainingCapacity() { 
+        return MAX_CUSTOMERS - instanceCount; 
+    }
 }
-

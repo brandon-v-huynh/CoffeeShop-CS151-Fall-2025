@@ -7,50 +7,145 @@ import java.util.Scanner;
 public class CoffeeShop {
     private static final List<Billable> menu = new ArrayList<>();
     private static final List<Order> orders = new ArrayList<>();
+    private static final List<Barista> baristas = new ArrayList<>();
     private static final Scanner sc = new Scanner(System.in);
     public static final int MAX_ORDERS = 100;
 
     public static void main(String[] args) {
         preloadMenu();
-        menuLoop();
+        preloadBaristas();
+        mainMenuLoop();
     }
 
-    private static void menuLoop() {
+    private static void mainMenuLoop() {
         while (true) {
-            System.out.println("\n=== CS 151 JAVA BEANS CAFE ==="); //added cs151 for fun!
+            System.out.println("\n=== CS151 JAVA BEANS CAFE ===");
+            System.out.println("1. Customer Mode");
+            System.out.println("2. Barista Mode");
+            System.out.println("3. Exit");
+            System.out.print("Choice: ");
+            String input = sc.nextLine();
+            if (input.equals("1")) customerMode();
+            else if (input.equals("2")) baristaMode();
+            else if (input.equals("3")) exitApp();
+            else System.out.println("Invalid choice.");
+        }
+    }
+
+    private static void customerMode() {
+        while (true) {
+            System.out.println("\n=== CUSTOMER MODE ===");
             System.out.println("1. View Menu");
             System.out.println("2. Place Order");
             System.out.println("3. View Orders");
-            System.out.println("4. Exit");
+            System.out.println("4. Return to Main Menu");
             System.out.print("Choice: ");
             String input = sc.nextLine();
             if (input.equals("1")) viewMenu();
             else if (input.equals("2")) placeOrder();
             else if (input.equals("3")) viewOrders();
-            else if (input.equals("4")) exitApp();
+            else if (input.equals("4")) break;
             else System.out.println("Invalid choice.");
         }
     }
 
-    private static void preloadMenu() {
-        /*
-        try {
+    private static void baristaMode() {
+        Barista currentBarista = selectBarista();
+        if (currentBarista == null) return;
 
-            Class<?> cls = Class.forName("MenuItem");
-            menu.add(cls.getConstructor(String.class, double.class).newInstance("Latte", 4.50));
-            menu.add(cls.getConstructor(String.class, double.class).newInstance("Espresso", 3.00));
-            menu.add(cls.getConstructor(String.class, double.class).newInstance("Americano", 3.75));
-            menu.add(cls.getConstructor(String.class, double.class).newInstance("Cappuccino", 4.25));
-            menu.add(cls.getConstructor(String.class, double.class).newInstance("Croissant", 2.50));
-        } catch (Exception e) {
-            menu.add("Latte");
-            menu.add("Espresso");
-            menu.add("Americano");
-            menu.add("Cappuccino");
-            menu.add("Croissant");
+        while (true) {
+            System.out.println("\n=== BARISTA PORTAL ===");
+            System.out.println("1. Clock In");
+            System.out.println("2. View All Orders");
+            System.out.println("3. Complete an Order");
+            System.out.println("4. View Performance");
+            System.out.println("5. Clock Out");
+            System.out.println("6. Return to Main Menu");
+            System.out.print("Choice: ");
+            String input = sc.nextLine();
+            if (input.equals("1")) currentBarista.clockIn();
+            else if (input.equals("2")) viewAllOrdersForBarista();
+            else if (input.equals("3")) completeOrder(currentBarista);
+            else if (input.equals("4")) currentBarista.viewPerformance();
+            else if (input.equals("5")) currentBarista.clockOut();
+            else if (input.equals("6")) break;
+            else System.out.println("Invalid choice.");
         }
-        */
-        // building MenuItem objects
+    }
+
+    private static Barista selectBarista() {
+        System.out.println("\nAvailable Baristas:");
+        for (int i = 0; i < baristas.size(); i++) {
+            System.out.println((i + 1) + ". " + baristas.get(i).getName() + " (ID: " + baristas.get(i).getEmployeeId() + ")");
+        }
+        System.out.print("Select barista by number: ");
+        String input = sc.nextLine();
+        try {
+            int choice = Integer.parseInt(input);
+            if (choice >= 1 && choice <= baristas.size()) {
+                Barista selected = baristas.get(choice - 1);
+                selected.greet();
+                return selected;
+            } else {
+                System.out.println("Invalid selection.");
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input.");
+            return null;
+        }
+    }
+
+    private static void viewAllOrdersForBarista() {
+        if (orders.isEmpty()) {
+            System.out.println("No orders available.");
+            return;
+        }
+        System.out.println("\nAll Orders:");
+        for (Order order : orders) {
+            System.out.println(order);
+        }
+    }
+
+    private static void completeOrder(Barista barista) {
+        if (orders.isEmpty()) {
+            System.out.println("No orders to complete.");
+            return;
+        }
+        
+        System.out.println("\nAvailable Orders:");
+        for (Order order : orders) {
+            System.out.println(order);
+        }
+        
+        System.out.print("Enter order ID to complete: ");
+        String input = sc.nextLine();
+        try {
+            int orderId = Integer.parseInt(input);
+            Order targetOrder = null;
+            for (Order order : orders) {
+                if (order.getOrderId() == orderId) {
+                    targetOrder = order;
+                    break;
+                }
+            }
+            if (targetOrder != null) {
+                barista.makeOrder(targetOrder);
+            } else {
+                System.out.println("Order ID " + orderId + " not found.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid order ID.");
+        }
+    }
+
+    private static void preloadBaristas() {
+        baristas.add(new Barista("Alice Johnson", "1234567890", "EMP001", "Morning"));
+        baristas.add(new Barista("Bob Smith", "2345678901", "EMP002", "Evening"));
+        baristas.add(new Barista("Carol Davis", "3456789012", "EMP003", "Night"));
+    }
+
+    private static void preloadMenu() {
         menu.add(new MenuItem("Latte", 4.50));
         menu.add(new MenuItem("Espresso", 3.00));
         menu.add(new MenuItem("Americano", 3.75));
@@ -60,46 +155,30 @@ public class CoffeeShop {
 
     private static void viewMenu() {
         System.out.println("\nMenu:");
-        /*
-        for (int i = 0; i < menu.size(); i++) {
-            Object o = menu.get(i);
-            String name = o.toString();
-            double price = 0;
-            try {
-                Class<?> c = o.getClass();
-                Object p = c.getMethod("getPrice").invoke(o);
-                if (p instanceof Number) price = ((Number)p).doubleValue();
-            } catch (Exception ignored) { }
-            System.out.printf("%d. %s - $%.2f\n", i + 1, name, price);
-        }
-        */
-        //printing using the interface instead of reflection
         for (int i = 0; i < menu.size(); i++) {
             Billable item = menu.get(i);
             System.out.printf("%d. %s - $%.2f%n", i + 1, item.getItemName(), item.getUnitPrice());
         }
     }
+
     private static void placeOrder() {
         if (orders.size() >= MAX_ORDERS) {
             System.out.println("Order capacity reached.");
             return;
         }
 
-        // FIX: validate customer name
         String name = getValidatedName();
         if (name == null) {
             System.out.println("Order cancelled");
             return;
         }
 
-        // FIX: validate phone number
         String phone = getValidatedPhone();
         if (phone == null) {
             System.out.println("Order cancelled");
             return;
         }
 
-        // naturally, if all is well we create new customer!
         Customer customer = new Customer(name, phone);
         customer.greet();
         Order order = new Order(customer);
@@ -152,7 +231,6 @@ public class CoffeeShop {
         } else {
             System.out.println("Order cancelled");
         }
-
     }
 
     private static String getValidatedName() {
@@ -240,6 +318,7 @@ public class CoffeeShop {
         }
         for (Order o : orders) System.out.println(o);
     }
+
     private static void exitApp() {
         System.out.println("Goodbye.");
         sc.close();

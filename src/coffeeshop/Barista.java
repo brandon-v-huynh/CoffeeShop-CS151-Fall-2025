@@ -127,7 +127,6 @@ public class Barista {
     public int getOrdersCompleted() { return ordersCompleted; }
     public static int getInstanceCount() { return instanceCount; }
     public static int getRemainingCapacity() { return MAX_BARISTAS - instanceCount; }
-
     @Override
     public String toString() {
         return "Barista[ID: " + employeeId + ", Name: " + name + ", Shift: " + shift +
