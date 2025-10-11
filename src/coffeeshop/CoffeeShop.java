@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CoffeeShop {
-    private static final List<Object> menu = new ArrayList<>();
+    private static final List<Billable> menu = new ArrayList<>();
     private static final List<Order> orders = new ArrayList<>();
     private static final Scanner sc = new Scanner(System.in);
     public static final int MAX_ORDERS = 100;
@@ -33,7 +33,9 @@ public class CoffeeShop {
     }
 
     private static void preloadMenu() {
+        /*
         try {
+
             Class<?> cls = Class.forName("MenuItem");
             menu.add(cls.getConstructor(String.class, double.class).newInstance("Latte", 4.50));
             menu.add(cls.getConstructor(String.class, double.class).newInstance("Espresso", 3.00));
@@ -47,10 +49,18 @@ public class CoffeeShop {
             menu.add("Cappuccino");
             menu.add("Croissant");
         }
+        */
+        // building MenuItem objects
+        menu.add(new MenuItem("Latte", 4.50));
+        menu.add(new MenuItem("Espresso", 3.00));
+        menu.add(new MenuItem("Americano", 3.75));
+        menu.add(new MenuItem("Cappuccino", 4.25));
+        menu.add(new MenuItem("Croissant", 2.50));
     }
 
     private static void viewMenu() {
         System.out.println("\nMenu:");
+        /*
         for (int i = 0; i < menu.size(); i++) {
             Object o = menu.get(i);
             String name = o.toString();
@@ -61,6 +71,12 @@ public class CoffeeShop {
                 if (p instanceof Number) price = ((Number)p).doubleValue();
             } catch (Exception ignored) { }
             System.out.printf("%d. %s - $%.2f\n", i + 1, name, price);
+        }
+        */
+        //printing using the interface instead of reflection
+        for (int i = 0; i < menu.size(); i++) {
+            Billable item = menu.get(i);
+            System.out.printf("%d. %s - $%.2f%n", i + 1, item.getItemName(), item.getUnitPrice());
         }
     }
     private static void placeOrder() {
