@@ -185,9 +185,37 @@ public class CoffeeShop {
         }
     }
 
+    private static int getValidatedQuantity() {
+        while (true) {
+            System.out.print("Quantity: ");
+            String input = sc.nextLine().trim();
 
+            if (input.isEmpty()) {
+                System.out.println("Quantity cannot be empty! Please enter a valid quantity!");
+                continue;
+            }
 
-
+            try {
+                int qty = Integer.parseInt(input);
+                if (qty < 1) {
+                    System.out.println("Quantity cannot be less than 1. Please enter a valid quantity!");
+                    continue;
+                }
+                if (qty > 99) {
+                    System.out.println("Quantity cannot be more than 99. Please enter a valid quantity!");
+                    continue;
+                }
+                return qty;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number!");
+                System.out.println("Try again? Input (y/n)");
+                String response = sc.nextLine().trim().toLowerCase();
+                if (!response.equals("y")) {
+                    return -1;
+                }
+            }
+        }
+    }
 
     private static void viewOrders() {
         if (orders.isEmpty()) {
