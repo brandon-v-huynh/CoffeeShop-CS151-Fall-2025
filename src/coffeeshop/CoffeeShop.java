@@ -17,7 +17,7 @@ public class CoffeeShop {
 
     private static void menuLoop() {
         while (true) {
-            System.out.println("\n=== JAVA BEANS CAFE ===");
+            System.out.println("\n=== CS 151 JAVA BEANS CAFE ==="); //added cs151 for fun!
             System.out.println("1. View Menu");
             System.out.println("2. Place Order");
             System.out.println("3. View Orders");
@@ -84,10 +84,22 @@ public class CoffeeShop {
             System.out.println("Order capacity reached.");
             return;
         }
-        System.out.print("Customer Name: ");
-        String name = sc.nextLine();
-        System.out.print("Phone: ");
-        String phone = sc.nextLine();
+
+        // FIX: validate customer name
+        String name = getValidatedName();
+        if (name == null) {
+            System.out.println("Order cancelled");
+            return;
+        }
+
+        // FIX: validate phone number
+        String phone = getValidatedPhone();
+        if (phone == null) {
+            System.out.println("Order cancelled");
+            return;
+        }
+
+        // naturally, if all is well we create new customer!
         Customer customer = new Customer(name, phone);
         customer.greet();
         Order order = new Order(customer);
@@ -97,6 +109,7 @@ public class CoffeeShop {
             System.out.print("Enter item number (0 to finish): ");
             String in = sc.nextLine();
             if (in.equals("0")) break;
+
             int num;
             try {
                 num = Integer.parseInt(in);
@@ -104,30 +117,122 @@ public class CoffeeShop {
                 System.out.println("Invalid input.");
                 continue;
             }
+
             if (num < 1 || num > menu.size()) {
                 System.out.println("Invalid choice.");
                 continue;
             }
-            System.out.print("Quantity: ");
-            int qty;
-            try {
-                qty = Integer.parseInt(sc.nextLine());
-            } catch (Exception e) {
-                System.out.println("Invalid input.");
+
+            int qty = getValidatedQuantity();
+            if (qty == -1) {
+                System.out.println("Invalid quantity.");
                 continue;
             }
+
             if (!order.addItem(menu.get(num - 1), qty)) {
                 System.out.println("Failed to add item.");
             } else {
-                System.out.println("Item added.");
+                System.out.println("Added item!");
             }
-            if (order.getItemCount() >= Order.MAX_ITEMS_PER_ORDER) break;
+
+            if (order.getItemCount() >= Order.MAX_ITEMS_PER_ORDER) {
+                System.out.println("Order capacity reached.");
+                break;
+            }
         }
 
-        System.out.printf("Total: $%.2f\n", order.getTotal());
-        orders.add(order);
-        System.out.println("Order placed successfully.");
+        if (order.getItemCount() > 0) {
+            System.out.printf("Total: $%.2f\n", order.getTotal());
+            orders.add(order);
+
+            int pointsEarned = (int) order.getTotal();
+            customer.addPoints(pointsEarned);
+            System.out.println("Order placed!");
+            System.out.println("Earned " + pointsEarned + " points. Total points: " + customer.getPoints());
+        } else {
+            System.out.println("Order cancelled");
+        }
+
     }
+
+    private static String getValidatedName() {
+        while (true) {
+            System.out.print("Name: ");
+            String name = sc.nextLine().trim();
+
+            if (name.isEmpty()) {
+                System.out.println("Name cannot be empty! Please enter a name!");
+                continue;
+            }
+
+            if (!Customer.isValidName(name)) {
+                System.out.println("Invalid name. Name must be more than 2 characters!");
+                System.out.println("Try again? Input (y/n)");
+                String response = sc.nextLine().trim().toLowerCase();
+                if (!response.equals("y")) {
+                    return null;
+                }
+            } else {
+                return name;
+            }
+        }
+    }
+
+    private static String getValidatedPhone() {
+        while (true) {
+            System.out.print("Phone Number: ");
+            String phone = sc.nextLine().trim();
+
+            if (phone.isEmpty()) {
+                System.out.println("Phone number cannot be empty! Please enter a valid phone number!");
+                continue;
+            }
+
+            if (!Customer.isValidPhone(phone)) {
+                System.out.println("Invalid phone number. Please enter a valid 10-digit phone number!");
+                System.out.println("Try again? Input (y/n)");
+                String response = sc.nextLine().trim().toLowerCase();
+                if (!response.equals("y")) {
+                    return null;
+                }
+            } else {
+                return phone;
+            }
+        }
+    }
+
+    private static int getValidatedQuantity() {
+        while (true) {
+            System.out.print("Quantity: ");
+            String input = sc.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("Quantity cannot be empty! Please enter a valid quantity!");
+                continue;
+            }
+
+            try {
+                int qty = Integer.parseInt(input);
+                if (qty < 1) {
+                    System.out.println("Quantity cannot be less than 1. Please enter a valid quantity!");
+                    continue;
+                }
+                if (qty > 99) {
+                    System.out.println("Quantity cannot be more than 99. Please enter a valid quantity!");
+                    continue;
+                }
+                return qty;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number!");
+                System.out.println("Try again? Input (y/n)");
+                String response = sc.nextLine().trim().toLowerCase();
+                if (!response.equals("y")) {
+                    return -1;
+                }
+            }
+        }
+    }
+
     private static void viewOrders() {
         if (orders.isEmpty()) {
             System.out.println("No orders yet.");
