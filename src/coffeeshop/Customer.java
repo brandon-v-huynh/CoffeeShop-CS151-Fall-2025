@@ -74,7 +74,7 @@ public class Customer extends Person {
     }
 
     public static boolean isValidPhone(String phone) {
-        if (phone != null || phone.trim().isEmpty()) {
+        if (phone == null || phone.trim().isEmpty()) {
             return false;
         }
 
