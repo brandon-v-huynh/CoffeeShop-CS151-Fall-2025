@@ -83,11 +83,7 @@ public class CoffeeShop {
             return;
         }
 
-
-        System.out.print("Customer Name: ");
-        String name = sc.nextLine();
-        System.out.print("Phone: ");
-        String phone = sc.nextLine();
+        // naturally, if all is well we create new customer!
         Customer customer = new Customer(name, phone);
         customer.greet();
         Order order = new Order(customer);
@@ -97,6 +93,7 @@ public class CoffeeShop {
             System.out.print("Enter item number (0 to finish): ");
             String in = sc.nextLine();
             if (in.equals("0")) break;
+
             int num;
             try {
                 num = Integer.parseInt(in);
@@ -104,30 +101,50 @@ public class CoffeeShop {
                 System.out.println("Invalid input.");
                 continue;
             }
+
             if (num < 1 || num > menu.size()) {
                 System.out.println("Invalid choice.");
                 continue;
             }
-            System.out.print("Quantity: ");
-            int qty;
-            try {
-                qty = Integer.parseInt(sc.nextLine());
-            } catch (Exception e) {
-                System.out.println("Invalid input.");
+
+            int qty = getValidatedQuantity();
+            if (qty == -1) {
+                System.out.println("Invalid quantity.");
                 continue;
             }
+
             if (!order.addItem(menu.get(num - 1), qty)) {
                 System.out.println("Failed to add item.");
             } else {
-                System.out.println("Item added.");
+                System.out.println("Added item!");
             }
-            if (order.getItemCount() >= Order.MAX_ITEMS_PER_ORDER) break;
+
+            if (order.getItemCount() >= Order.MAX_ITEMS_PER_ORDER) {
+                System.out.println("Order capacity reached.");
+                break;
+            }
         }
 
-        System.out.printf("Total: $%.2f\n", order.getTotal());
-        orders.add(order);
-        System.out.println("Order placed successfully.");
+        if (order.getItemCount() > 0) {
+            System.out.printf("Total: $%.2f\n", order.getTotal());
+            orders.add(order);
+
+            int pointsEarned = (int) order.getTotal();
+            customer.addPoints(pointsEarned);
+            System.out.println("Order placed!");
+            System.out.println("Earned " + pointsEarned + " points. Total points: " + customer.getPoints());
+        } else {
+            System.out.println("Order cancelled");
+        }
+
     }
+
+    private static String getValidatedName() {
+        while (true) {
+
+        }
+    }
+
     private static void viewOrders() {
         if (orders.isEmpty()) {
             System.out.println("No orders yet.");
