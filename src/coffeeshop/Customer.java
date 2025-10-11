@@ -67,4 +67,30 @@ public class Customer extends Person {
         if (!equalsByPhone(other)) return false;
         return true;
     }
+
+    // validation for the correct phone number and name, and used regex as well
+    public static boolean isValidName(String name) {
+        return name != null && !name.trim().isEmpty() && name.trim().length() >= 2;
+    }
+
+    public static boolean isValidPhone(String phone) {
+        if (phone != null || phone.trim().isEmpty()) {
+            return false;
+        }
+
+        String cleanedPhone = phone.replaceAll("[\\s\\-\\(\\)\\.]", "");
+        return cleanedPhone.matches("\\d{10,}");
+    }
+
+
+
+
+
+
+
+
+
+
+
 }
+
