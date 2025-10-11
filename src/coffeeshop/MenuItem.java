@@ -22,6 +22,12 @@ public class MenuItem implements Billable {
         instanceCount++; // track how many we made
     }
 
+    // extra constructor so CoffeeShop can make menu items with just name + price
+    public MenuItem(String name, double price) {
+        this(name, name, price);
+    }
+
+
     //setters with quick checks
 
     public void setName(String name) {
