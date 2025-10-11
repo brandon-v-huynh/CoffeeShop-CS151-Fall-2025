@@ -7,7 +7,7 @@ public class Order {
     private static int counter = 1;
     private int orderId;
     private Customer customer;
-    private List<Object> items;
+    private List<Billable> items;
     private List<Integer> quantities;
     private String status;
     public static final int MAX_ITEMS_PER_ORDER = 10;
@@ -25,6 +25,7 @@ public class Order {
         counter = c + 1;
         return c;
     }
+
     public int getOrderId() {
         return orderId;
     }
@@ -43,7 +44,8 @@ public class Order {
     public Customer getCustomer() {
         return customer;
     }
-    public boolean addItem(Object menuItem, int qty) {
+
+    public boolean addItem(Billable menuItem, int qty) {
         if (menuItem == null) return false;
         if (qty <= 0) return false;
         if (this.items.size() >= MAX_ITEMS_PER_ORDER) return false;
@@ -55,36 +57,17 @@ public class Order {
     public double getTotal() {
         double sum = 0.0;
         for (int i = 0; i < items.size(); i++) {
-            Object o = items.get(i);
+            Billable item = items.get(i);
             int q = quantities.get(i);
-            double price = 0.0;
-            if (o != null) {
-                try {
-                    Class<?> c = o.getClass();
-                    try {
-                        java.lang.reflect.Method m = c.getMethod("calculateTotal", int.class);
-                        Object v = m.invoke(o, q);
-                        if (v instanceof Number) {
-                            sum += ((Number) v).doubleValue();
-                        }
-                    } catch (NoSuchMethodException e) {
-                        java.lang.reflect.Method gp = c.getMethod("getPrice");
-                        Object p = gp.invoke(o);
-                        if (p instanceof Number) {
-                            price = ((Number) p).doubleValue();
-                            sum += price * q;
-                        }
-                    }
-                } catch (Exception ignore) { }
-            }
+            sum += item.calculateTotal(q);
         }
-        return sum;
+        return Math.round(sum * 100.0) / 100.0;
     }
+
     public int getItemCount() {
-        int n = 0;
-        for (int i = 0; i < items.size(); i++) n++;
-        return n;
+        return items.size();
     }
+
     @Override
     public String toString() {
         String cid = String.valueOf(getOrderId());
@@ -99,3 +82,4 @@ public class Order {
         return sb.toString();
     }
 }
+
