@@ -11,7 +11,6 @@ public abstract class Person {
         if (instanceCount >= MAX_PERSONS) {
             throw new IllegalStateException("Cannot create more than " + MAX_PERSONS + " persons");
         }
-        
         String n = name;
         if (n == null) n = "";
         n = n.trim();
@@ -34,8 +33,7 @@ public abstract class Person {
             } else if (digits.length() == 7) {
                 this.phone = digits.substring(0,3) + "-" + digits.substring(3);
             }
-        }
-    }
+        } }
     private boolean isPhoneValid(String s) {
         if (s == null) return false;
         String t = s.trim();
@@ -43,21 +41,17 @@ public abstract class Person {
         if (t.matches("\\d{3}-\\ad{3}-\\d{4}")) return true;
         return false;
     }
-
     public abstract void greet();
-
     public String getName() {
         String n = this.name;
         if (n == null) n = "";
         return n;
     }
-
     public String getPhone() {
         String p = this.phone;
         if (p == null) p = "";
         return p;
     }
-
     public void setName(String name) {
         String n = name;
         if (n == null) n = "";
@@ -127,6 +121,5 @@ public abstract class Person {
     
     public static int getRemainingCapacity() { 
         return MAX_PERSONS - instanceCount; 
-    }
-}
+    }}
 

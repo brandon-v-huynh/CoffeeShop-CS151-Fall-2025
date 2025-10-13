@@ -14,7 +14,6 @@ public class Customer extends Person {
         this.loyaltyPoints = 0;
         instanceCount++;
     }
-
     @Override
     public void greet() {
         String n = getName();
@@ -75,7 +74,6 @@ public class Customer extends Person {
         return true;
     }
 
-    // validation for the correct phone number and name, and used regex as well
     public static boolean isValidName(String name) {
         return name != null && !name.trim().isEmpty() && name.trim().length() >= 2;
     }

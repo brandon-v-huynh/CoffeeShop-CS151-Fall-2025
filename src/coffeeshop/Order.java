@@ -11,7 +11,6 @@ public class Order {
     private List<Integer> quantities;
     private String status;
     public static final int MAX_ITEMS_PER_ORDER = 10;
-
     public Order(Customer customer) {
         this.customer = customer;
         this.items = new ArrayList<>();
@@ -19,32 +18,26 @@ public class Order {
         this.status = "Pending";
         this.orderId = nextId();
     }
-
     private static synchronized int nextId() {
         int c = counter;
         counter = c + 1;
         return c;
     }
-
     public int getOrderId() {
         return orderId;
     }
-
     public String getStatus() {
         if (status == null) return "";
         return status;
     }
-
     public void setStatus(String s) {
         String v = s == null ? "" : s.trim();
         if (v.isEmpty()) v = "Pending";
         this.status = v;
     }
-
     public Customer getCustomer() {
         return customer;
     }
-
     public boolean addItem(Billable menuItem, int qty) {
         if (menuItem == null) return false;
         if (qty <= 0) return false;
@@ -53,7 +46,6 @@ public class Order {
         this.quantities.add(qty);
         return true;
     }
-
     public double getTotal() {
         double sum = 0.0;
         for (int i = 0; i < items.size(); i++) {
@@ -63,11 +55,9 @@ public class Order {
         }
         return Math.round(sum * 100.0) / 100.0;
     }
-
     public int getItemCount() {
         return items.size();
     }
-
     @Override
     public String toString() {
         String cid = String.valueOf(getOrderId());

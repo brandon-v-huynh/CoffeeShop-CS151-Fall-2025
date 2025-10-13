@@ -3,7 +3,6 @@ package coffeeshop;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 public class CoffeeShop {
     private static final List<Billable> menu = new ArrayList<>();
     private static final List<Order> orders = new ArrayList<>();
@@ -16,7 +15,6 @@ public class CoffeeShop {
         preloadBaristas();
         mainMenuLoop();
     }
-
     private static void mainMenuLoop() {
         while (true) {
             System.out.println("\n=== CS151 JAVA BEANS CAFE ===");
@@ -31,7 +29,6 @@ public class CoffeeShop {
             else System.out.println("Invalid choice.");
         }
     }
-
     private static void customerMode() {
         while (true) {
             System.out.println("\n=== CUSTOMER MODE ===");
@@ -48,7 +45,6 @@ public class CoffeeShop {
             else System.out.println("Invalid choice.");
         }
     }
-
     private static void baristaMode() {
         Barista currentBarista = selectBarista();
         if (currentBarista == null) return;
@@ -72,7 +68,6 @@ public class CoffeeShop {
             else System.out.println("Invalid choice.");
         }
     }
-
     private static Barista selectBarista() {
         System.out.println("\nAvailable Baristas:");
         for (int i = 0; i < baristas.size(); i++) {
@@ -95,7 +90,6 @@ public class CoffeeShop {
             return null;
         }
     }
-
     private static void viewAllOrdersForBarista() {
         if (orders.isEmpty()) {
             System.out.println("No orders available.");
@@ -106,7 +100,6 @@ public class CoffeeShop {
             System.out.println(order);
         }
     }
-
     private static void completeOrder(Barista barista) {
         if (orders.isEmpty()) {
             System.out.println("No orders to complete.");
@@ -138,13 +131,11 @@ public class CoffeeShop {
             System.out.println("Invalid order ID.");
         }
     }
-
     private static void preloadBaristas() {
         baristas.add(new Barista("Alice Johnson", "1234567890", "EMP001", "Morning"));
         baristas.add(new Barista("Bob Smith", "2345678901", "EMP002", "Evening"));
         baristas.add(new Barista("Carol Davis", "3456789012", "EMP003", "Night"));
     }
-
     private static void preloadMenu() {
         menu.add(new MenuItem("Latte", 4.50));
         menu.add(new MenuItem("Espresso", 3.00));
@@ -152,7 +143,6 @@ public class CoffeeShop {
         menu.add(new MenuItem("Cappuccino", 4.25));
         menu.add(new MenuItem("Croissant", 2.50));
     }
-
     private static void viewMenu() {
         System.out.println("\nMenu:");
         for (int i = 0; i < menu.size(); i++) {
@@ -160,29 +150,24 @@ public class CoffeeShop {
             System.out.printf("%d. %s - $%.2f%n", i + 1, item.getItemName(), item.getUnitPrice());
         }
     }
-
     private static void placeOrder() {
         if (orders.size() >= MAX_ORDERS) {
             System.out.println("Order capacity reached.");
             return;
         }
-
         String name = getValidatedName();
         if (name == null) {
             System.out.println("Order cancelled");
             return;
         }
-
         String phone = getValidatedPhone();
         if (phone == null) {
             System.out.println("Order cancelled");
             return;
         }
-
         Customer customer = new Customer(name, phone);
         customer.greet();
         Order order = new Order(customer);
-
         while (true) {
             viewMenu();
             System.out.print("Enter item number (0 to finish): ");
@@ -219,7 +204,6 @@ public class CoffeeShop {
                 break;
             }
         }
-
         if (order.getItemCount() > 0) {
             System.out.printf("Total: $%.2f\n", order.getTotal());
             orders.add(order);
@@ -232,7 +216,6 @@ public class CoffeeShop {
             System.out.println("Order cancelled");
         }
     }
-
     private static String getValidatedName() {
         while (true) {
             System.out.print("Name: ");
@@ -255,7 +238,6 @@ public class CoffeeShop {
             }
         }
     }
-
     private static String getValidatedPhone() {
         while (true) {
             System.out.print("Phone Number: ");
@@ -278,7 +260,6 @@ public class CoffeeShop {
             }
         }
     }
-
     private static int getValidatedQuantity() {
         while (true) {
             System.out.print("Quantity: ");
@@ -310,7 +291,6 @@ public class CoffeeShop {
             }
         }
     }
-
     private static void viewOrders() {
         if (orders.isEmpty()) {
             System.out.println("No orders yet.");
@@ -318,7 +298,6 @@ public class CoffeeShop {
         }
         for (Order o : orders) System.out.println(o);
     }
-
     private static void exitApp() {
         System.out.println("Goodbye.");
         sc.close();
