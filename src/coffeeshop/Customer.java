@@ -7,13 +7,23 @@ public class Customer extends Person {
     private int loyaltyPoints;
 
     public Customer(String name, String phone) {
-        super(name, phone);
+        super(name, phone, 0);
         if (instanceCount >= MAX_CUSTOMERS) {
             throw new IllegalStateException("Cannot create more than " + MAX_CUSTOMERS + " customers");
         }
         this.loyaltyPoints = 0;
         instanceCount++;
     }
+
+    public Customer(String name, String phone, double money){
+        super(name, phone, money);
+        if (instanceCount >= MAX_CUSTOMERS) {
+            throw new IllegalStateException("Cannot create more than " + MAX_CUSTOMERS + " customers");
+        }
+        this.loyaltyPoints = 0;
+        instanceCount++;
+    }
+    
     @Override
     public void greet() {
         String n = getName();
@@ -37,6 +47,23 @@ public class Customer extends Person {
         if (u > current) u = current;
         this.loyaltyPoints = current - u;
     }
+
+    public double getFunds() {
+        return money;
+    }
+
+    public void add(double amount) {
+        if (amount <= 0) throw new IllegalArgumentException("Amount must be positive");
+        money += amount;
+    }
+
+    public void spend(double amount) {
+        if (amount < 0) throw new IllegalArgumentException("Amount must be positive");
+        if (money < amount) throw new NotEnoughException(money);
+        money -= amount;
+        
+    }
+
     public int getPoints() {
         int p = this.loyaltyPoints;
         int out = 0;
@@ -64,6 +91,7 @@ public class Customer extends Person {
         StringBuilder sb = new StringBuilder();
         sb.append(base);
         sb.append(" | Loyalty Points: ");
+        sb.append(" | Balance: $ " + money);
         for (int i = 0; i < s.length(); i++) sb.append(s.charAt(i));
         return sb.toString();
     }

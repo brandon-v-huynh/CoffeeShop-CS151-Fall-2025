@@ -35,13 +35,15 @@ public class CoffeeShop {
             System.out.println("1. View Menu");
             System.out.println("2. Place Order");
             System.out.println("3. View Orders");
-            System.out.println("4. Return to Main Menu");
+            System.out.println("4. Add funds");
+            System.out.println("5. Return to Main Menu");
             System.out.print("Choice: ");
             String input = sc.nextLine();
             if (input.equals("1")) viewMenu();
             else if (input.equals("2")) placeOrder();
             else if (input.equals("3")) viewOrders();
-            else if (input.equals("4")) break;
+            else if (input.equals("4")) addFunds();
+            else if (input.equals("5")) break;
             else System.out.println("Invalid choice.");
         }
     }
@@ -150,6 +152,37 @@ public class CoffeeShop {
             System.out.printf("%d. %s - $%.2f%n", i + 1, item.getItemName(), item.getUnitPrice());
         }
     }
+
+    private static void addFunds() {
+        String name = getValidatedName();
+        if(name == null) {
+            System.out.println("Order cancelled");
+            return;
+        }
+
+        String phone = getValidatedPhone();
+        if(phone == null) {
+            System.out.println("Order cancelled");
+            return;
+        }
+        Customer customer = new Customer(name, phone, 0);
+        System.out.println("Enter the amount of money you have: ");
+        while (!sc.hasNextDouble()) {
+            System.out.println("Enter a number");
+            sc.next();
+        }
+        double funds = sc.nextDouble();
+        sc.nextLine();
+
+        try {
+            customer.add(funds);
+            System.out.printf("Funds added: $%.2f", customer.getFunds());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+       
+    }
+
     private static void placeOrder() {
         if (orders.size() >= MAX_ORDERS) {
             System.out.println("Order capacity reached.");
@@ -168,6 +201,16 @@ public class CoffeeShop {
         Customer customer = new Customer(name, phone);
         customer.greet();
         Order order = new Order(customer);
+        System.out.print("Enter starting amount: ");
+        double amt = 0;
+        if (sc.hasNextDouble()) {
+            amt = sc.nextDouble();
+        } else {
+            System.out.println("Invalid amount. Cannot start with $0.00");
+        }
+        sc.nextLine();
+        customer.add(amt);
+        
         while (true) {
             viewMenu();
             System.out.print("Enter item number (0 to finish): ");
@@ -205,13 +248,51 @@ public class CoffeeShop {
             }
         }
         if (order.getItemCount() > 0) {
-            System.out.printf("Total: $%.2f\n", order.getTotal());
-            orders.add(order);
+            double total = order.getTotal();
+            System.out.printf("Total: $%.2f", total);
+            System.out.println();
 
-            int pointsEarned = (int) order.getTotal();
+            try {
+                customer.spend(total);
+            } catch (NotEnoughException e){
+                System.out.printf("Insuffcient funds");
+                System.out.println();
+                System.out.print("Add more funds? (y/n): ");
+                String response = sc.nextLine().trim().toLowerCase();
+                if ("y".equals(response)) {
+                    double added = 0;
+                    while (true) {
+                        System.out.print("Added amount: ");
+                        if (sc.hasNextDouble()) {
+                            added = sc.nextDouble();
+                            sc.nextLine();
+                            break;
+                        } else {
+                            System.out.println("Enter a number");
+                            sc.next();
+                        }
+                    }
+
+                    try {
+                        customer.add(added);
+                        customer.spend(total);
+                    } catch (Exception ex) {
+                        System.out.println("Payment failed. Order cancelled");
+                        return;
+                    }
+                } else {
+                    System.out.println("Order cancelled (not enough)");
+                    return;
+                }
+            }
+            orders.add(order);
+            int pointsEarned = (int) total;
             customer.addPoints(pointsEarned);
-            System.out.println("Order placed!");
-            System.out.println("Earned " + pointsEarned + " points. Total points: " + customer.getPoints());
+            System.out.println("Payment accepted. Order has been placced!");
+            System.out.printf("Remaining funds: $%.2f", customer.getFunds()); 
+            System.out.println(" Earned " + pointsEarned + "points. Total points: " + customer.getPoints());
+            
+
         } else {
             System.out.println("Order cancelled");
         }

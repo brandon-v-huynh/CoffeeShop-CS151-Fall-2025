@@ -6,8 +6,9 @@ public abstract class Person {
     
     protected String name;
     protected String phone;
+    protected double money;
 
-    public Person(String name, String phone) {
+    public Person(String name, String phone, double money) {
         if (instanceCount >= MAX_PERSONS) {
             throw new IllegalStateException("Cannot create more than " + MAX_PERSONS + " persons");
         }
@@ -22,6 +23,8 @@ public abstract class Person {
         this.name = n;
         this.phone = p;
         instanceCount++;
+
+        this.money = money;
         if (!isPhoneValid(p)) {
             String digits = "";
             for (int i = 0; i < p.length(); i++) {
